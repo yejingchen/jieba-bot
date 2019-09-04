@@ -1,0 +1,11 @@
+[package]
+name = "jieba-bot"
+version = "0.1.0"
+authors = ["Ye Jingchen <ye.jingchen@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+jieba-rs = "0.4"
+telegram-bot = "0.6"
+futures = "0.1.28"
+tokio-core = "0.1.17"
