@@ -10,6 +10,14 @@ lazy_static! {
     static ref JIEBA: Jieba = Jieba::new();
 }
 
+fn make_answer<'a>(id: &'a inline_query::Id, msg: &'a str)
+-> inline_query::Result<'a> {
+    let content = Text::new(ParseMode::plain(msg));
+    let article = Article::new(msg, content);
+    let result = inline_query::Result::new(&id.0, article);
+    return result;
+}
+
 #[tokio::main]
 async fn main() {
     env_logger::init();
@@ -18,19 +26,20 @@ async fn main() {
     // BOT_TOKEN is a compile time environment variable
     let mut bot = tbot::from_env!("BOT_TOKEN").event_loop();
 
-    bot.inline(move |ctx| {
+    bot.inline(|ctx| {
         async move {
-            let words = JIEBA.cut(&ctx.query, false);
-            let joined = words.join(" ");
+            let answer = if ctx.query.is_empty() {
+                "输入点文字来分词".to_owned()
+            } else {
+                JIEBA.cut(&ctx.query, false).join(" ")
+            };
 
-            let content = Text::new(ParseMode::plain(&joined));
-            let article = Article::new(&joined, content);
-            let result = inline_query::Result::new(&ctx.id.0, article);
+            let result = make_answer(&ctx.id, &answer);
             if let Err(e) =  ctx.answer(&[result]).call().await {
                 log::warn!("answer InlineQuery failed with: {:?}", e);
             }
         }
     });
 
-    bot.polling().start().await.unwrap();
+    bot.polling().timeout(60).start().await.unwrap();
 }
