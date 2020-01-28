@@ -10,10 +10,11 @@ The official instance is `@jiebabot <https://t.me/jiebabot>`_.
 
 Build
 -----
-A stable Rust compiler toolchain should be fine.
+Requries rustc 1.39+ for async/await.
 
 .. code:: sh
 
+    export BOT_TOKEN=xxxxxxx # token is read at compile time
     # debug build
     cargo build
     # or, optimized build
@@ -21,18 +22,21 @@ A stable Rust compiler toolchain should be fine.
 
 Running
 -------
-Set the environment variable ``TELEGRAM_BOT_TOKEN=<your bot's secret token>``,
-then run it!
+Just run the executable! You may also want to set the log level by setting
+``RUST_LOG`` environment variable. See |log_crate|_.
+
+.. |log_crate| replace:: the `log` crate
+.. _log_crate: https://docs.rs/log
 
 .. code:: sh
 
-    TELEGRAM_BOT_TOKEN=xxxx cargo run --release
+    RUST_LOG=info cargo run --release
 
 Miscellaneous
 -------------
-Why not write this in Python?
+Q: Why not write this in Python?
 
-Because I'm afraid of programming in dynamic type languages :)
+A: Because I'm afraid of programming in dynamic-typed languages :)
 
 Privacy
 -------

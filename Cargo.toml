@@ -6,6 +6,8 @@ edition = "2018"
 
 [dependencies]
 jieba-rs = "0.4"
-telegram-bot = "0.6"
-futures = "0.1.28"
-tokio-core = "0.1.17"
+tbot = "0.4"
+tokio = { version = "0.2", features = ["full"] }
+lazy_static = "1.4"
+log = "0.4.0"
+env_logger = "0.7.1"
