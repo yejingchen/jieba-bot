@@ -32,6 +32,12 @@ Just run the executable! You may also want to set the log level by setting
 
     RUST_LOG=info cargo run --release
 
+Alternatively, you can use systemd to manage the service. A demonstration
+systemd service file is included. Place the service file in
+``/etc/systemd/system``, put the executable in ``/usr/local/bin/jieba-bot``, and
+issue a ``systemctl daemon-reload``. Then you can start and enable the service
+using normal systemd commands.
+
 Miscellaneous
 -------------
 Q: Why not write this in Python?

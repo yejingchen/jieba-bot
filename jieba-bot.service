@@ -1,0 +1,14 @@
+[Unit]
+Description=Jieba-bot Chinese word segmentation Telegram bot
+Documentation=https://github.com/yejingchen/jieba-bot
+After=network.target network-online.target nss-lookup.target
+
+[Service]
+Type=simple
+User=nobody
+Environment=RUST_LOG=info
+ExecStart=/usr/local/bin/jieba-bot
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
