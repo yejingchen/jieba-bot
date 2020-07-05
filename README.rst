@@ -14,7 +14,6 @@ Requries rustc 1.39+ for async/await.
 
 .. code:: sh
 
-    export BOT_TOKEN=xxxxxxx # token is read at compile time
     # debug build
     cargo build
     # or, optimized build
@@ -22,27 +21,37 @@ Requries rustc 1.39+ for async/await.
 
 Running
 -------
-Just run the executable! You may also want to set the log level by setting
-``RUST_LOG`` environment variable. See |log_crate|_.
+Configurations including bot token is provided at runtime via environment
+variables.
+
+- ``BOT_TOKEN``: required. This is what you get from botfather when you create
+  a bot.
+
+- ``RUST_LOG``: controls the logging behavior, for example: ``info``,
+  ``debug``, ``jieba_bot=debug``, ``tbot``, etc. See |log_crate|_.
+
+- ``HTTPS_PROXY``: in the form of ``http[s]://host:port``. Currently only http
+  and https proxy is supported.
 
 .. |log_crate| replace:: the `log` crate
 .. _log_crate: https://docs.rs/log
 
 .. code:: sh
 
-    RUST_LOG=info cargo run --release
+    RUST_LOG=info BOT_TOKEN=xxxxxx cargo run --release
 
-Alternatively, you can use systemd to manage the service. A demonstration
-systemd service file is included. Place the service file in
-``/etc/systemd/system``, put the executable in ``/usr/local/bin/jieba-bot``, and
-issue a ``systemctl daemon-reload``. Then you can start and enable the service
-using normal systemd commands.
+Alternatively, you can use systemd to manage the service. A demo systemd
+service and an EnvironmentFile are included. Place the service file in
+``/etc/systemd/system``, put the executable at ``/usr/local/bin/jieba-bot``,
+put ``jieba-bot.conf`` in ``/etc``, and issue a ``systemctl daemon-reload``.
+Then you can start and enable the ``jieba-bot`` service using normal systemd
+commands.
 
 Miscellaneous
 -------------
 Q: Why not write this in Python?
 
-A: Because I'm afraid of programming in dynamic-typed languages :)
+A: Because I'm afraid of programming in dynamically-typed languages :)
 
 Privacy
 -------
