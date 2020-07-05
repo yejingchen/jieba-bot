@@ -10,10 +10,13 @@ lazy_static! {
     static ref JIEBA: Jieba = Jieba::new();
 }
 
-fn make_answer<'a>(id: &'a inline_query::Id, msg: &'a str)
--> inline_query::Result<'a> {
+fn make_inline_result<'a>(
+    id: &'a inline_query::Id,
+    title: &'a str,
+    msg: &'a str
+) -> inline_query::Result<'a> {
     let content = Text::new(ParseMode::plain(msg));
-    let article = Article::new(msg, content);
+    let article = Article::new(title, content).description(msg);
     let result = inline_query::Result::new(&id.0, article);
     return result;
 }
@@ -28,18 +31,19 @@ async fn main() {
 
     bot.inline(|ctx| {
         async move {
-            let answer = if ctx.query.is_empty() {
-                "输入点文字来分词".to_owned()
+            let (title, msg) = if ctx.query.is_empty() {
+                ("输入点文字来分词", "就像这样")
             } else {
-                JIEBA.cut(&ctx.query, false).join(" ")
+                ("分词大成功！", &ctx.query[..])
             };
+            let answer = JIEBA.cut(msg, false).join(" ");
 
-            let result = make_answer(&ctx.id, &answer);
+            let result = make_inline_result(&ctx.id, title, &answer);
             if let Err(e) =  ctx.answer(&[result]).call().await {
                 log::warn!("answer InlineQuery failed with: {:?}", e);
             }
         }
     });
 
-    bot.polling().timeout(60).start().await.unwrap();
+    bot.polling().timeout(60_u64).start().await.unwrap();
 }
